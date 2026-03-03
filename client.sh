@@ -46,7 +46,7 @@ echo ${HOST}
 
 done
 
-        # do work here because file $f does not exist
+        # do work here because file does not exist
     fi
 
 sudo cp 50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml
