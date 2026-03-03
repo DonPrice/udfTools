@@ -29,13 +29,10 @@ SCRIPT="sudo chmod 700 55-pem.yaml; sudo cp 55-pem.yaml /etc/netplan/; sudo netp
 for HOSTNAME in ${HOSTS} ; do
     scp 55-pem.yaml ${USERNAME}@${HOSTNAME}:
     ssh -l ${USERNAME} ${HOSTNAME} "${SCRIPT}"
-done
 
-        # do work here because file $f does not exist
-    fi
-# Remove the Default IPv4 Route Client Traffic must route via IPv6 Interface.
-sudo route del -net 0.0.0.0 gw 10.1.1.1 netmask 0.0.0.0 dev ens5
-sudo route add -net 0.0.0.0 gw 10.1.10.5 netmask 0.0.0.0 dev ens6
+# # Remove the Default IPv4 Route Client Traffic must route via IPv6 Interface.
+# sudo route del -net 0.0.0.0 gw 10.1.1.1 netmask 0.0.0.0 dev ens5
+# sudo route add -net 0.0.0.0 gw 10.1.10.5 netmask 0.0.0.0 dev ens6
 
 # Change NetPlan to disable DHCP and configure static IP.
 cat <<EOF > 50-cloud-init.yaml 
@@ -44,10 +41,15 @@ network:
   ethernets:
     ens5:
       addresses:
-        - 10.1.1.4/24
+        - echo $HOSTNAME
       nameservers:
         addresses: [ 10.1.1.2 ]
 EOF
+
+done
+
+        # do work here because file $f does not exist
+    fi
 
 sudo cp 50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml
 
