@@ -24,23 +24,25 @@ network:
 EOF
 
 USERNAME=ubuntu
-HOSTS="10.1.1.4 10.1.1.6 10.1.1.8
-SCRIPT="sudo chmod 700 55-pem.yaml; sudo cp 55-pem.yaml /etc/netplan/; sudo netplan apply;
-for HOSTS in ${HOSTS} ; do
-    scp 55-pem.yaml ${USERNAME}@${HOSTS}:
-    ssh -l ${USERNAME} ${HOSTS} "${SCRIPT}"
+HOSTS="10.1.1.4 10.1.1.6 10.1.1.8"
+SCRIPT="sudo chmod 700 55-pem.yaml; sudo cp 55-pem.yaml /etc/netplan/; sudo netplan apply"
+for HOST in ${HOSTS} ; do
+    # scp 55-pem.yaml ${USERNAME}@${HOST}:
+    # ssh -l ${USERNAME} ${HOST} "${SCRIPT}"
 
 # Change NetPlan to disable DHCP and configure static IP.
-cat <<EOF > 50-cloud-init.yaml 
-network:
-  version: 2
-  ethernets:
-    ens5:
-      addresses:
-        - $HOSTS
-      nameservers:
-        addresses: [ 10.1.1.2 ]
-EOF
+echo ${HOST}
+
+    cat <<EOF > 50-cloud-init.yaml 
+    network:
+    version: 2
+    ethernets:
+        ens5:
+        addresses:
+            - $HOST
+        nameservers:
+            addresses: [ 10.1.1.2 ]
+    EOF
 
 done
 
