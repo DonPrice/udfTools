@@ -26,13 +26,9 @@ EOF
 USERNAME=ubuntu
 HOSTS="10.1.1.4 10.1.1.6 10.1.1.8
 SCRIPT="sudo chmod 700 55-pem.yaml; sudo cp 55-pem.yaml /etc/netplan/; sudo netplan apply;
-for HOSTNAME in ${HOSTS} ; do
-    scp 55-pem.yaml ${USERNAME}@${HOSTNAME}:
-    ssh -l ${USERNAME} ${HOSTNAME} "${SCRIPT}"
-
-# # Remove the Default IPv4 Route Client Traffic must route via IPv6 Interface.
-# sudo route del -net 0.0.0.0 gw 10.1.1.1 netmask 0.0.0.0 dev ens5
-# sudo route add -net 0.0.0.0 gw 10.1.10.5 netmask 0.0.0.0 dev ens6
+for HOSTS in ${HOSTS} ; do
+    scp 55-pem.yaml ${USERNAME}@${HOSTS}:
+    ssh -l ${USERNAME} ${HOSTS} "${SCRIPT}"
 
 # Change NetPlan to disable DHCP and configure static IP.
 cat <<EOF > 50-cloud-init.yaml 
@@ -41,7 +37,7 @@ network:
   ethernets:
     ens5:
       addresses:
-        - echo $HOSTNAME
+        - $HOSTS
       nameservers:
         addresses: [ 10.1.1.2 ]
 EOF
