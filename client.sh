@@ -45,6 +45,8 @@ network:
     ens5:
       addresses:
         - 10.1.1.4/24
+      nameservers:
+        addresses: [ 10.1.1.2 ]
 EOF
 
 sudo cp 50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml
