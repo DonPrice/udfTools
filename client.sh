@@ -25,10 +25,8 @@ EOF
 
 USERNAME=ubuntu
 HOSTS="10.1.1.4 10.1.1.6 10.1.1.8"
-SCRIPT="sudo chmod 700 55-pem.yaml; sudo cp 55-pem.yaml /etc/netplan/; sudo netplan apply"
+SCRIPT="sudo chmod 700 /home/ubuntu/55-pem.yaml; sudo chmod 700 /home/ubuntu/50-cloud-init.yaml; sudo cp /home/ubuntu/55-pem.yaml /etc/netplan/; sudo cp /home/ubuntu/50-cloud-init.yaml /etc/netplan/; sudo netplan apply"
 for HOST in ${HOSTS} ; do
-    # scp 55-pem.yaml ${USERNAME}@${HOST}:
-    # ssh -l ${USERNAME} ${HOST} "${SCRIPT}"
 
 # Change NetPlan to disable DHCP and configure static IP.
 cat <<EOF > 50-cloud-init.yaml 
@@ -41,11 +39,12 @@ ethernets:
     nameservers:
         addresses: [ 10.1.1.2 ]
 EOF
+
+    scp 55-pem.yaml ${USERNAME}@${HOST}:/home/ubuntu/
+    scp 50-cloud-init.yaml ${USERNAME}@${HOST}:/home/ubuntu/
+    ssh -l ${USERNAME} ${HOST} "${SCRIPT}"
+
 done
 
         # do work here because file does not exist
     fi
-
-# sudo cp 50-cloud-init.yaml /etc/netplan/50-cloud-init.yaml
-
-# sudo netplan apply
