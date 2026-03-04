@@ -31,13 +31,13 @@ for HOST in ${HOSTS} ; do
 # Change NetPlan to disable DHCP and configure static IP.
 cat <<EOF > 50-cloud-init.yaml 
 network:
-version: 2
-ethernets:
-    ens5:
-    addresses:
-        - ${HOST}
-    nameservers:
-        addresses: [ 10.1.1.2 ]
+    version: 2
+    ethernets:
+        ens5:
+        addresses:
+            - ${HOST}/24
+        nameservers:
+            addresses: [ 10.1.1.2 ]
 EOF
 
     scp 55-pem.yaml ${USERNAME}@${HOST}:/home/ubuntu/
