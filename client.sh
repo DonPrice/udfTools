@@ -31,7 +31,7 @@ for HOST in ${HOSTS} ; do
     # ssh -l ${USERNAME} ${HOST} "${SCRIPT}"
 
 # Change NetPlan to disable DHCP and configure static IP.
-echo "${HOST}" > host.yaml
+    echo "${HOST}" > host.yaml
 
     # cat <<\EOF > 50-cloud-init.yaml 
     # network:
